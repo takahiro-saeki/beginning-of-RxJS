@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "443523b82c9d8dcb6a5b"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "547ed61a4e8af7457f54"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -585,52 +585,61 @@
 
 	'use strict';
 
-	var _style = __webpack_require__(6);
-
-	var _style2 = _interopRequireDefault(_style);
-
 	var _rx = __webpack_require__(4);
 
 	var _rx2 = _interopRequireDefault(_rx);
 
+	var _style = __webpack_require__(6);
+
+	var _style2 = _interopRequireDefault(_style);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	(function (global) {
+	//var btnClicks = Rx.Observable.fromEvent($('#btn'), "click");
+	/*
+	const btn = document.getElementById('btn');
+	const btnClicks = Rx.Observable.fromEvent(btn, 'click')
 
-	  function main() {
-	    var dragTarget = document.getElementById('dragTarget');
+	btnClicks
+	.filter(value => value.altKey)
+	.subscribe(() => console.log('Altキーを押しながらクリックしたね！'));
+	*/
 
-	    // Get the three major events
-	    var mouseup = _rx2.default.Observable.fromEvent(dragTarget, 'mouseup');
-	    var mousemove = _rx2.default.Observable.fromEvent(document, 'mousemove');
-	    var mousedown = _rx2.default.Observable.fromEvent(dragTarget, 'mousedown');
+	//$box = $('#box')
+	(function () {
+	  var box_width, mousedown_events, mousemove_events, mouseup_events, source;
+	  var box = document.getElementById('box');
 
-	    var mousedrag = mousedown.flatMap(function (md) {
+	  mouseup_events = _rx2.default.Observable.fromEvent(box, 'mouseup');
+	  mousemove_events = _rx2.default.Observable.fromEvent(document, 'mousemove');
+	  mousedown_events = _rx2.default.Observable.fromEvent(box, 'mousedown');
 
-	      // calculate offsets when mouse down
-	      var startX = md.offsetX,
-	          startY = md.offsetY;
+	  source = mousedown_events.flatMap(function (event) {
+	    var start_left, start_pageX, start_pageY, start_top;
+	    start_pageX = event.pageX;
+	    start_pageY = event.pageY;
+	    start_left = parseInt(box.ownerDocument.defaultView.getComputedStyle(box, null).left);
+	    start_top = parseInt(box.ownerDocument.defaultView.getComputedStyle(box, null).top);
+	    box.classList.add('hovering');
+	    return mousemove_events.map(function (e) {
+	      return {
+	        left: start_left + (e.pageX - start_pageX),
+	        top: start_top + (e.pageY - start_pageY)
+	      };
+	    }).takeUntil(mouseup_events);
+	  });
 
-	      // Calculate delta with mousemove until mouseup
-	      return mousemove.map(function (mm) {
-	        mm.preventDefault();
+	  mouseup_events.subscribe(function () {
+	    return box.classList.remove('hovering');
+	  });
 
-	        return {
-	          left: mm.clientX - startX,
-	          top: mm.clientY - startY
-	        };
-	      }).takeUntil(mouseup);
+	  source.subscribe(function (pos) {
+	    TweenLite.set(box, {
+	      left: pos.left,
+	      top: pos.top
 	    });
-
-	    // Update position
-	    var subscription = mousedrag.subscribe(function (pos) {
-	      dragTarget.style.top = pos.top + 'px';
-	      dragTarget.style.left = pos.left + 'px';
-	    });
-	  }
-
-	  main();
-	})(window);
+	  });
+	})();
 
 /***/ },
 /* 1 */
@@ -641,11 +650,12 @@
 
 
 	// module
-	exports.push([module.id, "#_2Chk33U4yFOwKQ7Ck5Toaz {\n    background-repeat: no-repeat;\n    background-position: center;\n    background-size: contain;\n    height: 200px;\n    width: 200px;\n    background-color: #000000;\n    border: 1px solid #666666;\n    color: #ffffff;\n    padding: 10px;\n    position: absolute;\n    cursor: move;\n}\n", ""]);
+	exports.push([module.id, "#_2HXKJko7Zz0jKnAH3kL3sW {\n    display: table;\n    position: absolute;\n    top: 20px;\n    left: 20px;\n    width: 100px;\n    height: 100px;\n    background-color: deeppink;\n    border-radius: 8px;\n    box-shadow: 0 3px rgb(199, 3, 109), 0 3px 5px rgba(0, 0, 0, 0.29), 0 -1px rgba(255, 255, 255, 0.23) inset;\n    -webkit-transition: -webkit-transform 0.5s;\n    transition: -webkit-transform 0.5s;\n    transition: transform 0.5s;\n    transition: transform 0.5s, -webkit-transform 0.5s;\n    cursor: move;\n}\n\n#_2HXKJko7Zz0jKnAH3kL3sW::after {\n    content: '';\n    display: block;\n    position: absolute;\n    border-radius: 8px;\n    left: 0;\n    top: 0;\n    width: 100%;\n    height: 100%;\n    background-color: transparent;\n    box-shadow: 0 0 0 rgba(0, 0, 0, 0);\n    -webkit-transition: box-shadow 0.5s;\n    transition: box-shadow 0.5s;\n}\n\n#_2HXKJko7Zz0jKnAH3kL3sW._3GljtFpCjZYsmaETySLqyL::after {\n    box-shadow: 0 30px 20px rgba(0, 0, 0, 0.23);\n}\n\n#_2HXKJko7Zz0jKnAH3kL3sW._3GljtFpCjZYsmaETySLqyL {\n    -webkit-transform: scale(1.2);\n            transform: scale(1.2);\n    -webkit-transition-timing-function: cubic-bezier(0.575, 0.005, 0.460, 1); /* older webkit */\n    -webkit-transition-timing-function: cubic-bezier(0.575, 0.005, 0.460, 1.650);\n    transition-timing-function: cubic-bezier(0.575, 0.005, 0.460, 1.650); /* custom */\n}\n\n#_2HXKJko7Zz0jKnAH3kL3sW span {\n    display: table-cell;\n    text-align: center;\n    vertical-align: middle;\n    font-family: sans-serif;\n    color: white;\n    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.34);\n    -webkit-touch-callout: none;\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n}\n", ""]);
 
 	// exports
 	exports.locals = {
-		"dragTarget": "_2Chk33U4yFOwKQ7Ck5Toaz"
+		"box": "_2HXKJko7Zz0jKnAH3kL3sW",
+		"hovering": "_3GljtFpCjZYsmaETySLqyL"
 	};
 
 /***/ },
